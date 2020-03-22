@@ -11,7 +11,7 @@
     "lib",
     "android",
     "ios",
-    "reactnativesolutionsgyrohandler.podspec"
+    "react-native-solutions-gyro-handler.podspec"
   ],
   "scripts": {
     "test": "jest",

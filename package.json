@@ -1,6 +1,6 @@
 {
   "name": "@react-native-solutions/gyro-handler",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Gyroscope handler which can work with reanimated events",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -9,9 +9,9 @@
   "files": [
     "src",
     "lib",
+    "RNGyroHandler.podspec",
     "android",
-    "ios",
-    "react-native-solutions-gyro-handler.podspec"
+    "ios"
   ],
   "scripts": {
     "test": "jest",

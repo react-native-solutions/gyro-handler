@@ -8,14 +8,19 @@ Gyroscope handler which can work with reanimated events
 npm install @react-native-solutions/gyro-handler
 ```
 
+or
+
+```sh
+yarn add @react-native-solutions/gyro-handler
+```
+
 ## Usage
 
 ```js
-import GyroHandler from "@react-native-solutions/gyro-handler";
+import { GyroHandler, REAGyroHandler } from "@react-native-solutions/gyro-handler";
 
 // ...
 
-const deviceName = await GyroHandler.getDeviceName();
 ```
 
 ## License

@@ -42,17 +42,22 @@ public class RNGyroHandler extends ViewGroup implements SensorEventListener {
     @Override
     protected void onLayout(boolean changed,
                             int l, int t, int r, int b) {
+        System.out.println("onLayout");
+        this.start();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        this.start();
+        System.out.println("onDraw");
+//        this.start();
         super.onDraw(canvas);
     }
     @Override
     protected void onDetachedFromWindow() {
         System.out.println("onDetachedFromWindow");
-        this.stop();
+        if (this.sensor != null) {
+            this.stop();
+        }
         super.onDetachedFromWindow();
     }
 
@@ -68,24 +73,29 @@ public class RNGyroHandler extends ViewGroup implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        // System.out.println("onSensorChanged");
         Sensor mySensor = sensorEvent.sensor;
         if (mySensor.getType() == Sensor.TYPE_GYROSCOPE) {
+            // System.out.println("TYPE_GYROSCOPE");
             long curTime = System.currentTimeMillis();
             i++;
             if ((curTime - lastUpdate) > interval) {
                 i = 0;
                 ReactContext reactContext = (ReactContext)getContext();
+                // System.out.println("X Y");
+                // System.out.println(sensorEvent.values[0]);
+                // System.out.println(sensorEvent.values[1]);
                 reactContext
                         .getNativeModule(UIManagerModule.class)
                         .getEventDispatcher()
                         .dispatchEvent(
-                            new RNGyroHandlerEvent(
-                                getId(),
-                                sensorEvent.values[0],
-                                sensorEvent.values[1],
-                                sensorEvent.values[2],
-                                System.currentTimeMillis()
-                            )
+                                new RNGyroHandlerEvent(
+                                        getId(),
+                                        sensorEvent.values[0],
+                                        sensorEvent.values[1],
+                                        sensorEvent.values[2],
+                                        System.currentTimeMillis()
+                                )
                         );
                 lastUpdate = curTime;
             }

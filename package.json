@@ -1,6 +1,6 @@
 {
   "name": "@react-native-solutions/gyro-handler",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Gyroscope handler which can work with reanimated events",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",

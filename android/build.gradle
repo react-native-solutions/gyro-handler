@@ -34,6 +34,10 @@ android {
     versionCode 1
     versionName "1.0"
   }
+  configurations {
+        all*.exclude group: 'com.android.support', module: 'support-v4'
+        all*.exclude group: 'com.android.support', module: 'support-annotations'
+    }
   buildTypes {
     release {
       minifyEnabled false
@@ -125,4 +129,7 @@ dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  // build.gradle 
+  implementation "androidx.annotation:annotation:1.1.0"
+
 }

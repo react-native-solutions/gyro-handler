@@ -8,40 +8,40 @@ export default function App() {
   const translationY = new Value(0);
 
   const onGyroEvent = event(
-		[
-			{
-				nativeEvent: {
+    [
+      {
+        nativeEvent: {
           x: translationX,
-          y: translationY
-				}
-			}
-		],
-		{
-			useNativeDriver: true
-		}
+          y: translationY,
+        },
+      },
+    ],
+    {
+      useNativeDriver: true,
+    }
   );
 
   return (
     <View style={styles.container}>
       <REAGyroHandler
-        style={{ 
-          height: 100, 
-          width: '100%', 
+        style={{
+          height: 100,
+          width: '100%',
           backgroundColor: '#000',
           transform: [
             {
               translateX: interpolate(translationX, {
-                inputRange: [-5, 5],
-                outputRange: [-100, 100]
-              })
+                inputRange: [-1, 1],
+                outputRange: [-100, 100],
+              }),
             },
             {
               translateY: interpolate(translationY, {
-                inputRange: [-5, 5],
-                outputRange: [-100, 100]
-              })
-            }
-          ]
+                inputRange: [-1, 1],
+                outputRange: [-100, 100],
+              }),
+            },
+          ],
         }}
         onGyroChange={onGyroEvent}
       />

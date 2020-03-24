@@ -8,6 +8,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import java.util.Map;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.views.scroll.ScrollEventType;
 
 public class GyroHandlerModule extends SimpleViewManager<RNGyroHandler>  {
 
@@ -19,13 +20,12 @@ public class GyroHandlerModule extends SimpleViewManager<RNGyroHandler>  {
 
 	@Override
 	public @Nullable Map getExportedCustomDirectEventTypeConstants() {
-		return MapBuilder.of(
+		return MapBuilder.<String, Object>builder()
+			.put(
 				"onGyroChange",
 				MapBuilder.of("registrationName", "onGyroChange")
-
-		);
+			).build();
 	}
-
 
 	@Override
 	public String getName() {

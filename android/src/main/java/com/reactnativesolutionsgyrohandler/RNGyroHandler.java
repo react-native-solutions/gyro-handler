@@ -9,21 +9,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.common.MapBuilder;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
-import com.facebook.react.views.view.ReactViewGroup;
-
-import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.annotations.ReactPropGroup;
-import com.facebook.react.uimanager.annotations.ReactPropertyHolder;
-import android.view.MotionEvent;
+import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactApplicationContext;
-import android.util.Log;
-import androidx.annotation.Nullable;
-import com.facebook.react.bridge.WritableMap;
+
 import android.view.ViewGroup;
+
+import com.facebook.react.uimanager.UIManagerHelper;
 
 public class RNGyroHandler extends ViewGroup implements SensorEventListener {
     private SensorManager sensorManager;
@@ -44,34 +36,19 @@ public class RNGyroHandler extends ViewGroup implements SensorEventListener {
     @Override
     protected void onAttachedToWindow() {
         System.out.println("onAttachedToWindow");
-//        this.start();
         super.onAttachedToWindow();
     }
 
     @Override
     protected void onLayout(boolean changed,
                             int l, int t, int r, int b) {
-//        this.start();
     }
+
     @Override
     protected void onDraw(Canvas canvas) {
         this.start();
         super.onDraw(canvas);
     }
-//    @Override
-//    public boolean onTouchEvent(MotionEvent e) {
-//        System.out.println("qwe");
-//        super.onTouchEvent(e);
-//        WritableMap event = Arguments.createMap();
-//            event.putDouble("x", 1.0);
-//            event.putDouble("y", 1.0);
-//            event.putDouble("z", 1.0);
-//            event.putInt("target", getId());
-//            event.putDouble("timestamp", System.currentTimeMillis());
-//            sendEvent("onGyroChange", event);
-//        return true;
-//    }
-
     @Override
     protected void onDetachedFromWindow() {
         System.out.println("onDetachedFromWindow");
@@ -88,41 +65,28 @@ public class RNGyroHandler extends ViewGroup implements SensorEventListener {
     public void stop() {
         this.sensorManager.unregisterListener(this);
     }
-//    @ReactProp(name = "onChangeEvent")
-//    public void onChangeEvent(UsageEvents.Event event) {
-//        System.out.println(event);
-//    }
-
-    private void sendEvent(String eventName, @Nullable WritableMap params)
-    {
-        try {
-            ReactContext reactContext = (ReactContext)getContext();
-
-            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                    getId(),
-                    eventName,
-                    params
-            );
-        } catch (RuntimeException e) {
-            Log.e("ERROR", "Some error");
-        }
-    }
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
         Sensor mySensor = sensorEvent.sensor;
         if (mySensor.getType() == Sensor.TYPE_GYROSCOPE) {
-            WritableMap event = Arguments.createMap();
             long curTime = System.currentTimeMillis();
             i++;
             if ((curTime - lastUpdate) > interval) {
                 i = 0;
-                event.putDouble("x", sensorEvent.values[0]);
-                event.putDouble("y",sensorEvent.values[1]);
-                event.putDouble("z", sensorEvent.values[2]);
-                event.putInt("target", getId());
-                event.putDouble("timestamp", curTime);
-//                sendEvent("onGyroChange", event);
+                ReactContext reactContext = (ReactContext)getContext();
+                reactContext
+                        .getNativeModule(UIManagerModule.class)
+                        .getEventDispatcher()
+                        .dispatchEvent(
+                            new RNGyroHandlerEvent(
+                                getId(),
+                                sensorEvent.values[0],
+                                sensorEvent.values[1],
+                                sensorEvent.values[2],
+                                System.currentTimeMillis()
+                            )
+                        );
                 lastUpdate = curTime;
             }
         }
